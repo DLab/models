@@ -1,0 +1,174 @@
+
+%agent: mRNA(enc~PER1~PER2~CRY1~CRY2~REVERBa)
+%agent: PER(id~1~2,P1~u~p,P2~u~p,cry,cki)
+%agent: CRY(id~1~2,per,clk)
+%agent: REV_ERBa(rore)
+%agent: GENE(id~PER1~PER2~CRY1~CRY2~REVERBa,S1,S2,S3,S4,S5)
+%agent: CKI(per)
+%agent: EBOX_CLK_BMAL1(cry,gene)
+%agent: RORE(REV_ERBa,gene)
+
+%compartment: 'nucleus' 1.0
+%compartment: 'cytosol' 1.0
+
+
+%link: 'nuclear export' 'nucleus' -> 'cytosol' $ 0.0
+%link: 'nuclear import' 'cytosol' -> 'nucleus' $ 0.0
+
+
+#Chapter 'Translation'
+%use: 'cytosol'
+'tlpo'  mRNA(enc~PER1) -> mRNA(enc~PER1),PER(id~1,P1~u,P2~u,cry,cki) @ 10.0
+'tlpt'  mRNA(enc~PER2) -> mRNA(enc~PER2),PER(id~2,P1~u,P2~u,cry,cki)@ 10.0
+'tlro'  mRNA(enc~CRY1) -> mRNA(enc~CRY1),CRY(id~1,per,clk) @ 1.031
+'tlrt'  mRNA(enc~CRY2) -> mRNA(enc~CRY2),CRY(id~2,per,clk) @ 1.031
+'tlrv'  mRNA(enc~REVERBa) -> mRNA(enc~REVERBa),REV_ERBa(rore) @ 2.53
+
+
+
+#Chapter 'Transcription'
+%use: 'nucleus'
+'trPo'  \
+GENE(id~PER1,S1!1,S2!2,S3!3,S4!4,S5!5),EBOX_CLK_BMAL1(cry,gene!1),EBOX_CLK_BMAL1(cry,gene!2),EBOX_CLK_BMAL1(cry,gene!3),EBOX_CLK_BMAL1(cry,gene!4),EBOX_CLK_BMAL1(cry,gene!5) -> \
+GENE(id~PER1,S1!1,S2!2,S3!3,S4!4,S5!5),EBOX_CLK_BMAL1(cry,gene!1), EBOX_CLK_BMAL1(cry,gene!2),EBOX_CLK_BMAL1(cry,gene!3),EBOX_CLK_BMAL1(cry,gene!4),EBOX_CLK_BMAL1(cry,gene!5),mRNA(enc~PER1) @ 9415.947
+'trPt'  \
+GENE(id~PER2,S1!1,S2!2,S3!3,S4!4,S5!5),EBOX_CLK_BMAL1(cry,gene!1),EBOX_CLK_BMAL1(cry,gene!2),EBOX_CLK_BMAL1(cry,gene!3),EBOX_CLK_BMAL1(cry,gene!4),EBOX_CLK_BMAL1(cry,gene!5) -> \
+GENE(id~PER2,S1!1,S2!2,S3!3,S4!4,S5!5),EBOX_CLK_BMAL1(cry,gene!1),EBOX_CLK_BMAL1(cry,gene!2),EBOX_CLK_BMAL1(cry,gene!3),EBOX_CLK_BMAL1(cry,gene!4),EBOX_CLK_BMAL1(cry,gene!5),mRNA(enc~PER2) @ 3601.244
+'trRo'  \
+GENE(id~CRY1,S1!1,S2!2,S3!3,S4!4,S5),EBOX_CLK_BMAL1(cry,gene!1),RORE(REV_ERBa,gene!2),RORE(REV_ERBa,gene!3),RORE(REV_ERBa,gene!4) -> \
+GENE(id~CRY1,S1!1,S2!2,S3!3,S4!4,S5),EBOX_CLK_BMAL1(cry,gene!1),RORE(REV_ERBa,gene!2),RORE(REV_ERBa,gene!3),RORE(REV_ERBa,gene!4),mRNA(enc~CRY1) @ 105.3084
+'trRt'  \
+GENE(id~CRY2,S1!1,S2!2,S3!3,S4!4,S5),EBOX_CLK_BMAL1(cry,gene!1),RORE(REV_ERBa,gene!2),RORE(REV_ERBa,gene!3),RORE(REV_ERBa,gene!4) -> \
+GENE(id~CRY2,S1!1,S2!2,S3!3,S4!4,S5),EBOX_CLK_BMAL1(cry,gene!1),RORE(REV_ERBa,gene!2),RORE(REV_ERBa,gene!3),RORE(REV_ERBa,gene!4),mRNA(enc~CRY2) @ 89.3318
+'trRv'  \
+GENE(id~REVERBa,S1!1,S2!2,S3!3,S4,S5),EBOX_CLK_BMAL1(cry,gene!1),EBOX_CLK_BMAL1(cry,gene!2),EBOX_CLK_BMAL1(cry,gene!3) -> \
+GENE(id~REVERBa,S1!1,S2!2,S3!3,S4,S5),EBOX_CLK_BMAL1(cry,gene!1),EBOX_CLK_BMAL1(cry,gene!2),EBOX_CLK_BMAL1(cry,gene!3),mRNA(enc~REVERBa) @ 0.58
+
+
+#Chapter 'Degradation'
+%use: 'cytosol'
+'umPo'  mRNA(enc~PER1) -> @ 6.21
+'umPt'  mRNA(enc~PER2) -> @ 0.38
+'umRo'  mRNA(enc~CRY1) -> @ 0.30
+'umRt'  mRNA(enc~CRY2) -> @ 0.30
+'umRv'  mRNA(enc~REVERBa) -> @ 15.11
+
+%use: 
+'uRv' REV_ERBa() -> @ 16.25
+'up' PER(P1~p,cry) -> @ 3.39
+'upu' PER(P1~u) -> @ 0.08
+'uro' CRY(id~1,per) -> @ 0.44
+'urt' CRY(id~2,per) -> @ 0.59
+
+
+#Chapter 'Phosphorylation'
+%use:
+'hoo' CKI(per!1),PER(id~1,P1~u,P2~u,cki!1) -> CKI(per!1),PER(id~1,P1~p,P2~u,cki!1) @ 0.29
+'hot' PER(id~2,P1~u,P2~u,cki!1),CKI(per!1) -> PER(id~2,P1~p,P2~u,cki!1),CKI(per!1) @ 0.09
+'hto' PER(id~1,P1~p,P2~u,cki!1),CKI(per!1) -> PER(id~1,P1~p,P2~p,cki!1),CKI(per!1) @ 1.45
+
+
+#Chapter 'Nuclear Import / Export'
+%transport: <move-free> 'nuclear export' PER(cry,cki) @ 0.71
+%transport: <move-free> 'nuclear export' PER(cki,cry!1),CRY(per!1,clk) @ 0.71
+%transport: <move-free> 'nuclear export' PER(cry,cki!1),CKI(per!1) @ 0.71
+%transport: <move-free> 'nuclear export' PER(cki!2,cry!1),CKI(per!2),CRY(per!1,clk) @ 0.71
+%transport: <move-free> 'nuclear export' REV_ERBa(rore) @ 0.71
+%transport: <move-free> 'nuclear export' mRNA() @ 0.42
+
+%transport: <move-join> 'nuclear import' PER(P1~p,P2~u) @ 2.31
+%transport: <move-free> 'nuclear import' REV_ERBa() @ 2.31
+
+
+#Chapter 'Reactions'
+%use: 'cytosol'
+'ac Ref1' 	 PER(cki),CKI(per) 					-> PER(cki!1),CKI(per!1) @ 0.000348
+'ar Ref1' 	 CRY(per),PER(cry,P1~p) 				-> CRY(per!1),PER(cry!1,P1~p) @ 0.0002
+
+%use: 'nucleus'
+'ac Ref2' 	 CKI(per),PER(cki) 						-> CKI(per!1),PER(cki!1) @ 0.040517
+'ar Ref2' 	 CRY(per),PER(cry,P1~p) 				-> CRY(per!1),PER(cry!1,P1~p) @ 0.023276
+'bin' 		 CRY(clk),EBOX_CLK_BMAL1(cry,gene!_) 	-> CRY(clk!2),EBOX_CLK_BMAL1(cry!2,gene!_) @ 127.2862
+'binRv' 	 REV_ERBa(rore),RORE(gene!_,REV_ERBa) 	-> REV_ERBa(rore!1),RORE(gene!_,REV_ERBa!1) @ 0.11207
+'unbin' 	 CRY(clk!2),EBOX_CLK_BMAL1(cry!2,gene!_) -> CRY(clk),EBOX_CLK_BMAL1(cry,gene!_) @ 23.78
+'unbinRv' 	 REV_ERBa(rore!1),RORE(REV_ERBa!1,gene!_) -> REV_ERBa(rore),RORE(REV_ERBa,gene!_) @ 21.76
+
+%use:
+'dc' 				  CKI(per!1),PER(cki!1) 		-> CKI(per),PER(cki) @ 5.09
+'dr' 				  PER(cry!1),CRY(per!1) 		-> PER(cry),CRY(per) @ 0.35
+
+
+#Chapter 'Light'
+%use: 'nucleus'
+'zg Ref1'  GENE(id~PER1) -> GENE(id~PER1),mRNA(enc~PER1) @ 0.000339
+'zg Ref2'  GENE(id~PER2) -> GENE(id~PER2),mRNA(enc~PER2) @ 0.000339
+
+
+#Initial Conditions:
+%use: 'nucleus'
+%init:  2 (GENE(id~PER1,S1!1,S2!2,S3!3,S4!4,S5!5),EBOX_CLK_BMAL1(gene!1,cry),EBOX_CLK_BMAL1(gene!2,cry),EBOX_CLK_BMAL1(gene!3,cry),EBOX_CLK_BMAL1(gene!4,cry),EBOX_CLK_BMAL1(gene!5,cry))
+%init:  2  (GENE(id~PER2,S1!1,S2!2,S3!3,S4!4,S5!5),EBOX_CLK_BMAL1(gene!1,cry),EBOX_CLK_BMAL1(gene!2,cry),EBOX_CLK_BMAL1(gene!3,cry),EBOX_CLK_BMAL1(gene!4,cry),EBOX_CLK_BMAL1(gene!5,cry))
+%init:  2  (GENE(id~CRY1,S1!1,S2!2,S3!3,S4!4,S5),EBOX_CLK_BMAL1(gene!1,cry),RORE(gene!2,REV_ERBa),RORE(gene!3,REV_ERBa),RORE(gene!4,REV_ERBa))
+%init:  2  (GENE(id~CRY2,S1!1,S2!2,S3!3,S4!4,S5),EBOX_CLK_BMAL1(gene!1,cry),RORE(gene!2,REV_ERBa),RORE(gene!3,REV_ERBa),RORE(gene!4,REV_ERBa))
+%init:  2  (GENE(id~REVERBa,S1!1,S2!2,S3!3,S4,S5),EBOX_CLK_BMAL1(gene!1,cry),EBOX_CLK_BMAL1(gene!2,cry),EBOX_CLK_BMAL1(gene!3,cry))
+
+%init:  29  (mRNA(enc~CRY1))
+%init:  24  (mRNA(enc~CRY2))
+%init:  4  (CKI(per))
+
+%use: 'cytosol'
+%init:  4  (mRNA(enc~PER1))
+%init:  23  (mRNA(enc~PER2))
+%init:  4706  (mRNA(enc~CRY1))
+%init:  3996  (mRNA(enc~CRY2))
+%init:  130  (PER(id~1,cki,P1~u,cry,P2~u))
+%init:  1374  (PER(id~2,cki,P1~u,cry,P2~u))
+%init:  74  (PER(id~1,cki!1,P1~u,cry,P2~u),CKI(per!1))
+%init:  815  (PER(id~2,cki!1,P1~u,cry,P2~u),CKI(per!1))
+%init:  11070  (CRY(id~1,per,clk))
+%init:  6993  (CRY(id~2,per,clk))
+%init:  10404  (CKI(per))
+%init:  1  (PER(id~1,cki!1,P1~p,cry,P2~u),CKI(per!1))
+%init:  7  (PER(id~2,cki!1,P1~p,cry,P2~u),CKI(per!1))
+%init:  4  (PER(id~2,cki,P1~p,cry,P2~u))
+%init:  1  (PER(id~1,cki!1,P1~p,cry,P2~p),CKI(per!1))
+%init:  1  (PER(id~1,cki,P1~p,cry,P2~p))
+%init:  1  (PER(id~1,cki,P1~p,cry!1,P2~u),CRY(id~1,per!1,clk))
+%init:  14  (PER(id~2,cki,P1~p,cry!1,P2~u),CRY(id~1,per!1,clk))
+%init:  1  (PER(id~1,cki!2,P1~p,cry!1,P2~u),CRY(id~1,per!1,clk),CKI(per!2))
+%init:  12  (PER(id~2,cki!2,P1~p,cry!1,P2~u),CRY(id~1,per!1,clk),CKI(per!2))
+%init:  1  (PER(id~1,cki,P1~p,cry!1,P2~u),CRY(id~2,per!1,clk))
+%init:  9  (CRY(id~2,per!1,clk),PER(id~2,cki,P1~p,cry!1,P2~u))
+%init:  1  (PER(id~1,cki!2,P1~p,cry!1,P2~u),CRY(id~2,per!1,clk),CKI(per!2))
+%init:  7  (PER(id~2,cki!2,P1~p,cry!1,P2~u),CKI(per!2),CRY(id~2,per!1,clk))
+%init:  17  (PER(id~1,cki,P1~p,cry!1,P2~p),CRY(id~1,per!1,clk))
+%init:  11  (PER(id~1,cki!1,P1~p,cry!2,P2~p),CRY(id~1,clk,per!2),CKI(per!1))
+%init:  10  (PER(id~1,cki,P1~p,cry!1,P2~p),CRY(id~2,per!1,clk))
+%init:  7  (PER(id~1,cki!1,P1~p,cry!2,P2~p),CRY(id~2,clk,per!2),CKI(per!1))
+
+%use: 
+%obs: 'mRNA(enc~PER1)' mRNA(enc~PER1)
+%obs: 'mRNA(enc~PER2)' mRNA(enc~PER2)
+%obs: 'mRNA(enc~CRY1)' mRNA(enc~CRY1)
+%obs: 'mRNA(enc~CRY2)' mRNA(enc~CRY2)
+%obs: 'PER(id~1)' PER(id~1)
+%obs: 'PER(id~2)' PER(id~2)
+%obs: 'CRY(id~1)' CRY(id~1)
+%obs: 'CRY(id~2)' CRY(id~2)
+
+
+#Perturbations:
+%use: 'nucleus'
+%var: 'N' 1
+%mod: repeat [T] > 12*'N' && 'N'[mod]2 = 0 do \
+	$UPDATE 'zg Ref1' 0.000339;\
+	$UPDATE 'zg Ref2' 0.000339;\
+	$UPDATE 'N' 'N'+1\
+until [false]
+%mod: repeat [T] > 12*'N' && 'N'[mod]2 = 1 do \
+	$UPDATE 'zg Ref1' 0.00;\
+	$UPDATE 'zg Ref2' 0.00;\
+	$UPDATE 'N' 'N'+1\
+until [false]
+
+
