@@ -1,0 +1,229 @@
+
+
+#VARIABLES
+%var: 'Preys' |Prey(i,f~l)|
+
+%var: 'Pred-H' |Predator(feed~h?)|
+%var: 'Pred-S' |Predator(feed~s?)|
+%var: 'Preds' 'Pred-H'+'Pred-S'
+
+%var: 'Preys 11' |Prey(loc~b11,f~l)|
+%var: 'Preys 12' |Prey(loc~b12,f~l)|
+%var: 'Preys 13' |Prey(loc~b13,f~l)|
+%var: 'Preys 21' |Prey(loc~b21,f~l)|
+%var: 'Preys 22' |Prey(loc~b22,f~l)|
+%var: 'Preys 23' |Prey(loc~b23,f~l)|
+%var: 'Preys 31' |Prey(loc~b31,f~l)|
+%var: 'Preys 32' |Prey(loc~b32,f~l)|
+%var: 'Preys 33' |Prey(loc~b33,f~l)|
+
+%var: 'Preds 11' |Predator(loc~b11)|
+%var: 'Preds 12' |Predator(loc~b12)|
+%var: 'Preds 13' |Predator(loc~b13)|
+%var: 'Preds 21' |Predator(loc~b21)|
+%var: 'Preds 22' |Predator(loc~b22)|
+%var: 'Preds 23' |Predator(loc~b23)|
+%var: 'Preds 31' |Predator(loc~b31)|
+%var: 'Preds 32' |Predator(loc~b32)|
+%var: 'Preds 33' |Predator(loc~b33)|
+
+
+
+%var: 'pred FEED' 0.0078 #0.01
+%var: 'pred UNFEED' 0.0005 #0.001
+
+%var: 'pred DIE'  1.06 #FIXED 0.616 by time to 100 P die** 0.75
+%var: 'prey DIE'  0.7 #FIXED by media = 1203
+
+%var: 'pred MIT' 1.5
+%var: 'prey MIT b11' 2.5 * ( 1 - 'Preys 11' / (50000 + ([int] ('Preys 11' / 49995) )*('Preys 11' - 49994) ) )
+%var: 'prey MIT b12' 2.5 * ( 1 - 'Preys 12' / (50000 + ([int] ('Preys 12' / 49995) )*('Preys 12' - 49994) ) )
+%var: 'prey MIT b13' 2.5 * ( 1 - 'Preys 13' / (50000 + ([int] ('Preys 13' / 49995) )*('Preys 13' - 49994) ) )
+%var: 'prey MIT b21' 2.5 * ( 1 - 'Preys 21' / (50000 + ([int] ('Preys 21' / 49995) )*('Preys 21' - 49994) ) )
+%var: 'prey MIT b22' 2.5 * ( 1 - 'Preys 22' / (50000 + ([int] ('Preys 22' / 49995) )*('Preys 22' - 49994) ) )
+%var: 'prey MIT b23' 2.5 * ( 1 - 'Preys 23' / (50000 + ([int] ('Preys 23' / 49995) )*('Preys 23' - 49994) ) )
+%var: 'prey MIT b31' 2.5 * ( 1 - 'Preys 31' / (50000 + ([int] ('Preys 31' / 49995) )*('Preys 31' - 49994) ) )
+%var: 'prey MIT b32' 2.5 * ( 1 - 'Preys 32' / (50000 + ([int] ('Preys 32' / 49995) )*('Preys 32' - 49994) ) )
+%var: 'prey MIT b33' 2.5 * ( 1 - 'Preys 33' / (50000 + ([int] ('Preys 33' / 49995) )*('Preys 33' - 49994) ) )
+
+%var: 'pred INIT' 27
+%var: 'prey INIT' 56
+
+%var: 'pred transport rate' 0.1 # 0.77 * 0.5 #0.032
+%var: 'prey transport rate' 0.005 # 0.001 0.4248 * 0.5 #56.5t
+
+
+
+
+#TRANSPORTS
+
+	Prey(loc~b11,i,f~l) <-> Prey(loc~b12,i,f~l) @'prey transport rate','prey transport rate'
+	Prey(loc~b11,i,f~l) <-> Prey(loc~b21,i,f~l) @'prey transport rate','prey transport rate'
+	
+	Prey(loc~b13,i,f~l) <-> Prey(loc~b12,i,f~l) @'prey transport rate','prey transport rate'
+	Prey(loc~b13,i,f~l) <-> Prey(loc~b23,i,f~l) @'prey transport rate','prey transport rate'
+	
+	Prey(loc~b31,i,f~l) <-> Prey(loc~b32,i,f~l) @'prey transport rate','prey transport rate'
+	Prey(loc~b31,i,f~l) <-> Prey(loc~b21,i,f~l) @'prey transport rate','prey transport rate'
+	
+	Prey(loc~b33,i,f~l) <-> Prey(loc~b32,i,f~l) @'prey transport rate','prey transport rate'
+	Prey(loc~b33,i,f~l) <-> Prey(loc~b23,i,f~l) @'prey transport rate','prey transport rate'
+	
+	Prey(loc~b12,i,f~l) <-> Prey(loc~b23,i,f~l) @'prey transport rate','prey transport rate'
+	Prey(loc~b23,i,f~l) <-> Prey(loc~b32,i,f~l) @'prey transport rate','prey transport rate'
+	Prey(loc~b32,i,f~l) <-> Prey(loc~b21,i,f~l) @'prey transport rate','prey transport rate'
+	Prey(loc~b21,i,f~l) <-> Prey(loc~b12,i,f~l) @'prey transport rate','prey transport rate'
+	
+	Prey(loc~b22,i,f~l) <-> Prey(loc~b11,i,f~l) @'prey transport rate','prey transport rate'
+	Prey(loc~b22,i,f~l) <-> Prey(loc~b12,i,f~l) @'prey transport rate','prey transport rate'
+	Prey(loc~b22,i,f~l) <-> Prey(loc~b13,i,f~l) @'prey transport rate','prey transport rate'
+	Prey(loc~b22,i,f~l) <-> Prey(loc~b21,i,f~l) @'prey transport rate','prey transport rate'
+	Prey(loc~b22,i,f~l) <-> Prey(loc~b23,i,f~l) @'prey transport rate','prey transport rate'
+	Prey(loc~b22,i,f~l) <-> Prey(loc~b31,i,f~l) @'prey transport rate','prey transport rate'
+	Prey(loc~b22,i,f~l) <-> Prey(loc~b32,i,f~l) @'prey transport rate','prey transport rate'
+	Prey(loc~b22,i,f~l) <-> Prey(loc~b33,i,f~l) @'prey transport rate','prey transport rate'
+	
+	
+	
+	
+	Predator(loc~b11) <-> Predator(loc~b12) @'pred transport rate','pred transport rate'
+	Predator(loc~b11) <-> Predator(loc~b21) @'pred transport rate','pred transport rate'
+	
+	Predator(loc~b13) <-> Predator(loc~b12) @'pred transport rate','pred transport rate'
+	Predator(loc~b13) <-> Predator(loc~b23) @'pred transport rate','pred transport rate'
+	
+	Predator(loc~b31) <-> Predator(loc~b21) @'pred transport rate','pred transport rate'
+	Predator(loc~b31) <-> Predator(loc~b32) @'pred transport rate','pred transport rate'
+	
+	Predator(loc~b33) <-> Predator(loc~b32) @'pred transport rate','pred transport rate'
+	Predator(loc~b33) <-> Predator(loc~b23) @'pred transport rate','pred transport rate'
+	
+	Predator(loc~b12) <-> Predator(loc~b23) @'pred transport rate','pred transport rate'
+	Predator(loc~b23) <-> Predator(loc~b32) @'pred transport rate','pred transport rate'
+	Predator(loc~b32) <-> Predator(loc~b21) @'pred transport rate','pred transport rate'
+	Predator(loc~b21) <-> Predator(loc~b12) @'pred transport rate','pred transport rate'
+	
+	Predator(loc~b22) <-> Predator(loc~b11) @'pred transport rate','pred transport rate'
+	Predator(loc~b22) <-> Predator(loc~b12) @'pred transport rate','pred transport rate'
+	Predator(loc~b22) <-> Predator(loc~b13) @'pred transport rate','pred transport rate'
+	Predator(loc~b22) <-> Predator(loc~b21) @'pred transport rate','pred transport rate'
+	Predator(loc~b22) <-> Predator(loc~b23) @'pred transport rate','pred transport rate'
+	Predator(loc~b22) <-> Predator(loc~b31) @'pred transport rate','pred transport rate'
+	Predator(loc~b22) <-> Predator(loc~b32) @'pred transport rate','pred transport rate'
+	Predator(loc~b22) <-> Predator(loc~b33) @'pred transport rate','pred transport rate'
+
+
+
+#AGENTS
+%agent: Predator(feed~h~s~d,loc~b11~b12~b13~b21~b22~b23~b31~b32~b33)
+%agent: Prey(i,f~l~d,loc~b11~b12~b13~b21~b22~b23~b31~b32~b33)
+
+
+#RULES
+'prey mitosis 11' Prey(i,f~l,loc~b11)  -> Prey(i,f~l,loc~b11),Prey(i,f~l,loc~b11) @ 'prey MIT b11'
+'prey mitosis 12' Prey(i,f~l,loc~b12)  -> Prey(i,f~l,loc~b12),Prey(i,f~l,loc~b12) @ 'prey MIT b12'
+'prey mitosis 13' Prey(i,f~l,loc~b13)  -> Prey(i,f~l,loc~b13),Prey(i,f~l,loc~b13) @ 'prey MIT b13'
+'prey mitosis 21' Prey(i,f~l,loc~b21)  -> Prey(i,f~l,loc~b21),Prey(i,f~l,loc~b21) @ 'prey MIT b21'
+'prey mitosis 22' Prey(i,f~l,loc~b22)  -> Prey(i,f~l,loc~b22),Prey(i,f~l,loc~b22) @ 'prey MIT b22'
+'prey mitosis 23' Prey(i,f~l,loc~b23)  -> Prey(i,f~l,loc~b23),Prey(i,f~l,loc~b23) @ 'prey MIT b23'
+'prey mitosis 31' Prey(i,f~l,loc~b31)  -> Prey(i,f~l,loc~b31),Prey(i,f~l,loc~b31) @ 'prey MIT b31'
+'prey mitosis 32' Prey(i,f~l,loc~b32)  -> Prey(i,f~l,loc~b32),Prey(i,f~l,loc~b32) @ 'prey MIT b32'
+'prey mitosis 33' Prey(i,f~l,loc~b33)  -> Prey(i,f~l,loc~b33),Prey(i,f~l,loc~b33) @ 'prey MIT b33'
+
+'predation feed 1-11' Predator(feed~h,loc~b11),Prey(i,f~l,loc~b11) -> Predator(feed~h!1,loc~b11),Prey(i!1,f~d,loc~b11) @ 'pred FEED'
+'predation feed 1-12' Predator(feed~h,loc~b12),Prey(i,f~l,loc~b12) -> Predator(feed~h!1,loc~b12),Prey(i!1,f~d,loc~b12) @ 'pred FEED'
+'predation feed 1-13' Predator(feed~h,loc~b13),Prey(i,f~l,loc~b13) -> Predator(feed~h!1,loc~b13),Prey(i!1,f~d,loc~b13) @ 'pred FEED'
+'predation feed 1-21' Predator(feed~h,loc~b21),Prey(i,f~l,loc~b21) -> Predator(feed~h!1,loc~b21),Prey(i!1,f~d,loc~b21) @ 'pred FEED'
+'predation feed 1-22' Predator(feed~h,loc~b22),Prey(i,f~l,loc~b22) -> Predator(feed~h!1,loc~b22),Prey(i!1,f~d,loc~b22) @ 'pred FEED'
+'predation feed 1-23' Predator(feed~h,loc~b23),Prey(i,f~l,loc~b23) -> Predator(feed~h!1,loc~b23),Prey(i!1,f~d,loc~b23) @ 'pred FEED'
+'predation feed 1-31' Predator(feed~h,loc~b31),Prey(i,f~l,loc~b31) -> Predator(feed~h!1,loc~b31),Prey(i!1,f~d,loc~b31) @ 'pred FEED'
+'predation feed 1-32' Predator(feed~h,loc~b32),Prey(i,f~l,loc~b32) -> Predator(feed~h!1,loc~b32),Prey(i!1,f~d,loc~b32) @ 'pred FEED'
+'predation feed 1-33' Predator(feed~h,loc~b33),Prey(i,f~l,loc~b33) -> Predator(feed~h!1,loc~b33),Prey(i!1,f~d,loc~b33) @ 'pred FEED'
+
+'predation feed 2-11' Prey(i!_,f~d,loc~b11),Prey(i,f~l,loc~b11) -> Prey(i!_,f~d!1,loc~b11),Prey(i!1,f~d,loc~b11) @ 'pred FEED'
+'predation feed 2-12' Prey(i!_,f~d,loc~b12),Prey(i,f~l,loc~b12) -> Prey(i!_,f~d!1,loc~b12),Prey(i!1,f~d,loc~b12) @ 'pred FEED'
+'predation feed 2-13' Prey(i!_,f~d,loc~b13),Prey(i,f~l,loc~b13) -> Prey(i!_,f~d!1,loc~b13),Prey(i!1,f~d,loc~b13) @ 'pred FEED'
+'predation feed 2-21' Prey(i!_,f~d,loc~b21),Prey(i,f~l,loc~b21) -> Prey(i!_,f~d!1,loc~b21),Prey(i!1,f~d,loc~b21) @ 'pred FEED'
+'predation feed 2-22' Prey(i!_,f~d,loc~b22),Prey(i,f~l,loc~b22) -> Prey(i!_,f~d!1,loc~b22),Prey(i!1,f~d,loc~b22) @ 'pred FEED'
+'predation feed 2-23' Prey(i!_,f~d,loc~b23),Prey(i,f~l,loc~b23) -> Prey(i!_,f~d!1,loc~b23),Prey(i!1,f~d,loc~b23) @ 'pred FEED'
+'predation feed 2-31' Prey(i!_,f~d,loc~b31),Prey(i,f~l,loc~b31) -> Prey(i!_,f~d!1,loc~b31),Prey(i!1,f~d,loc~b31) @ 'pred FEED'
+'predation feed 2-32' Prey(i!_,f~d,loc~b32),Prey(i,f~l,loc~b32) -> Prey(i!_,f~d!1,loc~b32),Prey(i!1,f~d,loc~b32) @ 'pred FEED'
+'predation feed 2-33' Prey(i!_,f~d,loc~b33),Prey(i,f~l,loc~b33) -> Prey(i!_,f~d!1,loc~b33),Prey(i!1,f~d,loc~b33) @ 'pred FEED'
+
+'predation stop feed' Predator(feed~h!1),Prey(i!1,f!2),Prey(i!2,f!3),Prey(i!3,f!4),Prey(i!4,f!5), \
+										Prey(i!5,f!6),Prey(i!6,f!7),Prey(i!7,f!8),Prey(i!8,f!9), \
+										Prey(i!9,f!10),Prey(i!10,f!11),Prey(i!11,f!12), \
+										Prey(i!12,f!13),Prey(i!13,f!14),Prey(i!14,f!15),Prey(i!15,f!16), \
+										Prey(i!16,f!17),Prey(i!17,f!18),Prey(i!18,f) \
+					-> Predator(feed~s) @ INF
+					
+'predator mitosis 11' Predator(feed~s,loc~b11) -> Predator(feed~h,loc~b11),Predator(feed~h,loc~b11) @ 'pred MIT'
+'predator mitosis 12' Predator(feed~s,loc~b12) -> Predator(feed~h,loc~b12),Predator(feed~h,loc~b12) @ 'pred MIT'
+'predator mitosis 13' Predator(feed~s,loc~b13) -> Predator(feed~h,loc~b13),Predator(feed~h,loc~b13) @ 'pred MIT'					
+'predator mitosis 21' Predator(feed~s,loc~b21) -> Predator(feed~h,loc~b21),Predator(feed~h,loc~b21) @ 'pred MIT'
+'predator mitosis 22' Predator(feed~s,loc~b22) -> Predator(feed~h,loc~b22),Predator(feed~h,loc~b22) @ 'pred MIT'
+'predator mitosis 23' Predator(feed~s,loc~b23) -> Predator(feed~h,loc~b23),Predator(feed~h,loc~b23) @ 'pred MIT'					
+'predator mitosis 31' Predator(feed~s,loc~b31) -> Predator(feed~h,loc~b31),Predator(feed~h,loc~b31) @ 'pred MIT'
+'predator mitosis 32' Predator(feed~s,loc~b32) -> Predator(feed~h,loc~b32),Predator(feed~h,loc~b32) @ 'pred MIT'
+'predator mitosis 33' Predator(feed~s,loc~b33) -> Predator(feed~h,loc~b33),Predator(feed~h,loc~b33) @ 'pred MIT'
+
+'predator unfeed' Prey(i!_,f~d!1),Prey(i!1,f~d) -> Prey(i!_,f~d) @ 'pred UNFEED'
+
+'prey die' Prey(f~l) -> @ 'prey DIE'
+
+'predator die 1' Predator(feed~h) -> @ 'pred DIE'*2
+'predator die 2' Predator(feed~s) -> @ 'pred DIE'/8
+'predator die 3' Predator(feed!_) -> @ 'pred DIE'
+'predator die 4' Prey(i,f~d?) -> @ INF
+
+
+#INITS
+
+%init: 'prey INIT' Prey(loc~b11)
+%init: 'prey INIT' Prey(loc~b12)
+%init: 'prey INIT' Prey(loc~b13)
+%init: 'prey INIT' Prey(loc~b21)
+%init: 'prey INIT' Prey(loc~b22)
+%init: 'prey INIT' Prey(loc~b23)
+%init: 'prey INIT' Prey(loc~b31)
+%init: 'prey INIT' Prey(loc~b32)
+%init: 'prey INIT' Prey(loc~b33)
+
+#%use: 'bottle'[0][0]
+%mod: [T] > 1 do $ADD 'pred INIT' Predator(feed~h,loc~b11)
+
+
+#OBSERVABLE
+#%use: 
+%obs: 'oPredators' [log] ('Preds' / 30 + 1)
+%obs: 'oPreys' [log] ('Preys' / 30 + 1)
+
+%obs: 'bottle[0][0]:oPredators' [log] ('Preds 11' / 30 + 1)
+%obs: 'bottle[0][0]:oPreys' [log] ('Preys 11' / 30 + 1)
+%obs: 'bottle[0][1]:oPredators' [log] ('Preds 12' / 30 + 1)
+%obs: 'bottle[0][1]:oPreys' [log] ('Preys 12' / 30 + 1)
+%obs: 'bottle[0][2]:oPredators' [log] ('Preds 13' / 30 + 1)
+%obs: 'bottle[0][2]:oPreys' [log] ('Preys 13' / 30 + 1)
+%obs: 'bottle[1][0]:oPredators' [log] ('Preds 21' / 30 + 1)
+%obs: 'bottle[1][0]:oPreys' [log] ('Preys 21' / 30 + 1)
+%obs: 'bottle[1][1]:oPredators' [log] ('Preds 22' / 30 + 1)
+%obs: 'bottle[1][1]:oPreys' [log] ('Preys 22' / 30 + 1)
+%obs: 'bottle[1][2]:oPredators' [log] ('Preds 23' / 30 + 1)
+%obs: 'bottle[1][2]:oPreys' [log] ('Preys 23' / 30 + 1)
+%obs: 'bottle[2][0]:oPredators' [log] ('Preds 31' / 30 + 1)
+%obs: 'bottle[2][0]:oPreys' [log] ('Preys 31' / 30 + 1)
+%obs: 'bottle[2][1]:oPredators' [log] ('Preds 32' / 30 + 1)
+%obs: 'bottle[2][1]:oPreys' [log] ('Preys 32' / 30 + 1)
+%obs: 'bottle[2][2]:oPredators' [log] ('Preds 33' / 30 + 1)
+%obs: 'bottle[2][2]:oPreys' [log] ('Preys 33' / 30 + 1)
+
+
+
+
+#mpiexec -n 25 time ../../KaSim_nov/KaSim -i predator.cka -t 20 -p 1000 -sync-t 0.1 -d out/ -seed 1
+
+
+
+
+
+
